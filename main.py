@@ -2,6 +2,7 @@ from rich import print
 from rich.prompt import Prompt
 from rich.panel import Panel
 
+from models.download import download_with_progress
 from models.tools import print_banner, clear_terminal_screen
 from models.messages import ShowNoticeMessage
 from avamovie.scraper import AvaMovieScraper
@@ -45,11 +46,19 @@ def main() -> None:
     clear_terminal_screen()
 
     print(Panel(movie_informations["movie_discription"]))
-
+    
+    ls,sl = 0,[]
     for quality, download_link in download_links.items():
-        print("\n:star2:", quality, ":", download_link)
-
-
+        print("\n:star2:",ls, quality, ":", download_link)
+        sl.append(download_link)
+        ls+=1
+    
+    choiced_link = int(Prompt.ask("\n :car: pick one to download"))
+    
+    clear_terminal_screen()
+    
+    download_with_progress(sl[choiced_link])
+    
 if __name__ == "__main__":
     clear_terminal_screen()
     print_banner()
